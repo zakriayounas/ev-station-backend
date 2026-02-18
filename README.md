@@ -53,7 +53,7 @@ A full-featured backend API for an electric vehicle booking system with user man
 
 ```bash
 # Clone the repository
-https://github.com/zakriayounas/ev-station-backend.git
+https://github.com/John Doeyounas/ev-station-backend.git
 cd ev-station
 
 # Install dependencies

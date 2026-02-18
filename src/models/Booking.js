@@ -6,7 +6,7 @@ const bookingSchema = new mongoose.Schema(
     station: { type: mongoose.Schema.Types.ObjectId, ref: "Station", required: true },
     date: { type: Date, required: true },
     slotTime: { type: String, required: true },
-    cost: { type: Number, required: true, min: 0 },
+    amount: { type: Number, required: true, min: 0 }, // renamed from cost
     status: {
       type: String,
       enum: ["pending", "confirmed", "completed", "cancelled"],

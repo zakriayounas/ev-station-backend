@@ -1,12 +1,25 @@
 const Station = require("../models/Station");
 
 exports.createStation = async (req, res) => {
-  const station = await Station.create({
-    ...req.body,
-    owner: req.user._id,
-  });
+  try {
+    const { name, location, chargers } = req.body;
 
-  res.status(201).json(station);
+    if (!name || !location || !location.city || !location.address) {
+      return res.status(400).json({ message: "Name, city, and address are required" });
+    }
+
+    const station = await Station.create({
+      name,
+      location,
+      chargers: chargers || [],
+      owner: req.user._id,
+    });
+
+    res.status(201).json(station);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message || "Server error" });
+  }
 };
 
 exports.getStations = async (req, res) => {
@@ -14,7 +27,7 @@ exports.getStations = async (req, res) => {
     const { city, owner, name, page = 1, limit = 10 } = req.query;
 
     let filter = {};
-    if (city) filter.city = { $regex: city, $options: "i" };
+    if (city) filter["location.city"] = { $regex: city, $options: "i" };
     if (name) filter.name = { $regex: name, $options: "i" };
     if (owner) filter.owner = owner;
 

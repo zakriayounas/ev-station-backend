@@ -1,0 +1,162 @@
+{
+  "info": {
+    "name": "EV Booking API",
+    "_postman_id": "ev-booking-api-001",
+    "description": "Postman collection for EV Booking & User Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"username@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"03001234567\",\n  \"role\": \"user\",\n  \"vehicles\": [{\"brand\":\"Tesla\",\"model\":\"Model 3\",\"batteryCapacity\":75,\"vehicleNumber\":\"ABC-123\"}]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api","auth","register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"username@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+          }
+        },
+        {
+          "name": "Google OAuth Redirect",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/auth/google", "host": ["{{baseUrl}}"], "path": ["api","auth","google"] }
+          }
+        },
+        {
+          "name": "Google OAuth Callback",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/auth/google/callback?code=YOUR_CODE_HERE", "host": ["{{baseUrl}}"], "path": ["api","auth","google","callback"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?status=approved&role=user&name=John Doe&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","users"],
+              "query": [
+                { "key": "status", "value": "approved" },
+                { "key": "role", "value": "user" },
+                { "key": "name", "value": "John Doe" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/profile/me", "host": ["{{baseUrl}}"], "path": ["api","users","profile","me"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "John Doe Updated" },
+                { "key": "phone", "value": "03111234567" },
+                { "key": "vehicles", "value": "[{\"brand\":\"Tesla\",\"model\":\"Model S\",\"batteryCapacity\":100,\"vehicleNumber\":\"XYZ-123\"}]" },
+                { "key": "profileImage", "type": "file", "src": "/path/to/image.jpg" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/profile/me", "host": ["{{baseUrl}}"], "path": ["api","users","profile","me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stations",
+      "item": [
+        {
+          "name": "Create Station",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Station 1\",\n  \"city\": \"Karachi\",\n  \"address\": \"Street 123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/stations", "host": ["{{baseUrl}}"], "path": ["api","stations"] }
+          }
+        },
+        {
+          "name": "Get Stations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/stations?city=Karachi&page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["api","stations"], "query": [
+              { "key": "city", "value": "Karachi" },
+              { "key": "page", "value": "1" },
+              { "key": "limit", "value": "10" }
+            ]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"station\": \"STATION_ID_HERE\",\n  \"date\": \"2026-02-20\",\n  \"slotTime\": \"10:00\",\n  \"cost\": 100\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": ["{{baseUrl}}"], "path": ["api","bookings"] }
+          }
+        },
+        {
+          "name": "Get My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/bookings/my", "host": ["{{baseUrl}}"], "path": ["api","bookings","my"] }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "https://ev-station-backend.vercel.app" },
+    { "key": "token", "value": "" }
+  ]
+}
