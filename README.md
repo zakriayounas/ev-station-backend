@@ -53,8 +53,8 @@ A full-featured backend API for an electric vehicle booking system with user man
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ev-booking-api.git
-cd ev-booking-api
+https://github.com/zakriayounas/ev-station-backend.git
+cd ev-station
 
 # Install dependencies
 npm install
