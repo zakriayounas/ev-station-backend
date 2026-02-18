@@ -2,7 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-const queryString = require("query-string");
 const { getRandomColor } = require("../utils/helper");
 
 exports.register = async (req, res) => {
@@ -49,7 +48,8 @@ exports.login = async (req, res) => {
 
 exports.googleAuthRedirect = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-  const options = {
+
+  const options = new URLSearchParams({
     redirect_uri: process.env.GOOGLE_REDIRECT_URI,
     client_id: process.env.GOOGLE_CLIENT_ID,
     access_type: "offline",
@@ -59,11 +59,12 @@ exports.googleAuthRedirect = (req, res) => {
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
     ].join(" "),
-  };
+  });
 
-  const url = `${rootUrl}?${queryString.stringify(options)}`;
-  res.redirect(url); 
+  const url = `${rootUrl}?${options.toString()}`;
+  res.redirect(url);
 };
+
 
 
 exports.googleAuthCallback = async (req, res) => {
