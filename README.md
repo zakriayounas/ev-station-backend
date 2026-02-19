@@ -168,7 +168,7 @@ project-root/
 │
 ├─ .env.example
 ├─ package.json
-└─ server.js
+└─ index.js
 ```
 
 ---
