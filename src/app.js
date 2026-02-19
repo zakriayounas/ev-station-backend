@@ -8,7 +8,6 @@ const userRoutes = require("./routes/userRoutes");
 const stationRoutes = require("./routes/stationRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 
-const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger");
 
 const app = express();
@@ -24,13 +23,36 @@ app.use(express.urlencoded({ extended: true }));
 // --------------------
 // Swagger (MUST be before static)
 // --------------------
-app.use(
-  "/api/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    explorer: true,
-  })
-);
+app.get("/api/docs", (req, res) => {
+  res.setHeader("Content-Type", "text/html");
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>EV Station API Docs</title>
+      <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+    </head>
+    <body>
+      <div id="swagger-ui"></div>
+
+      <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+      <script>
+        window.onload = () => {
+          SwaggerUIBundle({
+            url: "/api/swagger.json",
+            dom_id: "#swagger-ui"
+          });
+        };
+      </script>
+    </body>
+    </html>
+  `);
+});
+
+app.get("/api/swagger.json", (req, res) => {
+  res.json(swaggerSpec);
+});
+
 
 // --------------------
 // API Routes
