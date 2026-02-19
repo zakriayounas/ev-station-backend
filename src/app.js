@@ -23,31 +23,36 @@ app.use(express.urlencoded({ extended: true }));
 // --------------------
 // Swagger (MUST be before static)
 // --------------------
-app.get("/api/docs", (req, res) => {
-  res.setHeader("Content-Type", "text/html");
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>EV Station API Docs</title>
-      <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
-    </head>
-    <body>
-      <div id="swagger-ui"></div>
+app.get(
+  "/api/docs",
+  helmet({ contentSecurityPolicy: false }), // middleware here
+  (req, res) => {
+    res.setHeader("Content-Type", "text/html");
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>EV Station API Docs</title>
+        <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+      </head>
+      <body>
+        <div id="swagger-ui"></div>
 
-      <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
-      <script>
-        window.onload = () => {
-          SwaggerUIBundle({
-            url: "/api/swagger.json",
-            dom_id: "#swagger-ui"
-          });
-        };
-      </script>
-    </body>
-    </html>
-  `);
-});
+        <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+        <script>
+          window.onload = () => {
+            SwaggerUIBundle({
+              url: "/api/swagger.json",
+              dom_id: "#swagger-ui"
+            });
+          };
+        </script>
+      </body>
+      </html>
+    `);
+  }
+);
+
 
 app.get("/api/swagger.json", (req, res) => {
   res.json(swaggerSpec);
