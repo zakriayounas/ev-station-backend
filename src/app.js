@@ -14,7 +14,19 @@ const app = express();
 
 // Middlewares
 app.use(cors({ origin: "*" }));
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+        imgSrc: ["'self'", "data:", "validator.swagger.io"],
+        connectSrc: ["'self'", "https://ev-station-backend.vercel.app"]
+      },
+    },
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,10 +43,23 @@ app.get("/", (req, res) => {
 });
 
 // Swagger docs
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { 
-  customCssUrl: CSS_URL 
-}));
+// 1. Define complete CDN URLs
+const CSS_URL = "https://cdnjs.cloudflare.com";
+const JS_URLS = [
+  "https://cdnjs.cloudflare.com",
+  "https://cdnjs.cloudflare.com"
+];
+
+// 3. Update Swagger Setup
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCssUrl: CSS_URL,
+    customJs: JS_URLS, // Fixes "SwaggerUIBundle is not defined"
+  })
+);
+
 
 // API routes
 app.use("/api/auth", authRoutes);

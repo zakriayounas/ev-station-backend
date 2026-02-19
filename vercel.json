@@ -1,10 +1,10 @@
 {
   "version": 2,
   "builds": [
-    { 
-      "src": "src/index.js", 
+    {
+      "src": "src/index.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["utils/swagger.js"] } 
+      "config": { "includeFiles": ["src/utils/**", "src/routes/**"] }
     }
   ],
   "routes": [
