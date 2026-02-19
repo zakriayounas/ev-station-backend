@@ -31,12 +31,7 @@ app.get("/", (req, res) => {
 });
 
 // Swagger docs
-app.use(
-  "/api/docs",
-  helmet({ contentSecurityPolicy: false }),
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec)
-);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // API routes
 app.use("/api/auth", authRoutes);
